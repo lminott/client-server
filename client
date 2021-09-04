@@ -1,0 +1,29 @@
+import java.util.Scanner;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
+public class Client {
+
+	public static void main(String[] args) throws IOException,UnknownHostException {
+		try (//first step is to create a scanner to allow for user input
+		Scanner scan = new Scanner(System.in)) {
+			try (//then create the socket object to allow the client and server to communicate with each other with an IP address and a port number as the parameters
+			Socket sp = new Socket("10.0.0.154",5678)) {
+				//then  create another scanner to allow for the server to send back data to the client
+				Scanner s= new Scanner(sp.getInputStream());
+				System.out.print("ENTER PASSWORD");
+				String Password= scan.nextLine();
+				//to pass on the number to the server we will utilize the PrintStream class
+				PrintStream print= new PrintStream(sp.getOutputStream());
+				print.println(Password);
+				//After this we need to read and print out the result from the server
+				String pass= s.nextLine();
+				System.out.println(pass);
+			}
+		}
+
+	}
+
+}
